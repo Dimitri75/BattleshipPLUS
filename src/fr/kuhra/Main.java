@@ -11,9 +11,13 @@ public class Main {
         Game game = new Game();
 
         Scanner sc = new Scanner(System.in);
-        int x, y, result = 0;
+        int x, y, shipNumber, result = 0;
 
         while (result != 1) {
+            sc.reset();
+            System.out.print("Avec quel bateau souhaite tirer Player1 ? ");
+            shipNumber = Integer.parseInt(sc.next());
+
             sc.reset();
             System.out.print("Tir de Player1 en x : ");
             x = Integer.parseInt(sc.next());
@@ -22,7 +26,7 @@ public class Main {
             System.out.print("Tir de Player1 en y : ");
             y = Integer.parseInt(sc.next());
 
-            result = game.getPlayer1().shoot(1, new Location(x, y), game.getPlayer2());
+            result = game.getPlayer1().shoot(shipNumber, new Location(x, y), game.getPlayer2());
 
             System.out.println("\nPlayer1");
             game.getPlayer1().getMap().printMap();

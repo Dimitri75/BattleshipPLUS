@@ -3,6 +3,8 @@ package fr.kuhra.classes;
 import fr.kuhra.enumerations.Position;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Dimitri on 28/09/2015.
@@ -55,19 +57,25 @@ public class Map {
 
     public void setShipLocations(){
         for (Ship ship : ships){
-            for (Location location : ship.getLocations()){
-                matrice[location.getX()][location.getY()] = " " + String.valueOf(ships.indexOf(ship)) + " ";
+            if (!ship.getLocations().isEmpty()) {
+                for (Location location : ship.getLocations()) {
+                    matrice[location.getX()][location.getY()] = " " + String.valueOf(ships.indexOf(ship)) + " ";
+                }
             }
         }
     }
 
     public boolean isCorrectlyLocated(Ship ship){
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher matcher;
+
         boolean isCorrect = true;
         try {
             for (Location location : ship.getLocations()) {
-                if (matrice[location.getX()][location.getY()] != " . ") {
+                matcher = pattern.matcher(matrice[location.getX()][location.getY()]);
+
+                if (matcher.find())
                     isCorrect = false;
-                }
             }
         }
         catch (Exception e){
@@ -77,7 +85,7 @@ public class Map {
     }
 
     public void printMap(){
-        setShipLocations();
+        //setShipLocations();
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++)
                 System.out.print(matrice[x][y]);

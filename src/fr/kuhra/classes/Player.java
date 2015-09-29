@@ -53,6 +53,9 @@ public class Player {
     }
 
     public int shoot(int shipNumber, Location location, Player player){
+        if (map.getShips().isEmpty() || map.getShips().size() <= shipNumber)
+            return -1;
+
         Ship shooter = map.getShips().get(shipNumber);
         int range = shooter.getRange();
 
@@ -134,6 +137,7 @@ public class Player {
 
                         if (map.isCorrectlyLocated(ship)){
                             isValid = true;
+                            map.setShipLocations();
                             map.printMap();
                         }
                         else
@@ -172,6 +176,7 @@ public class Player {
                 }
             }
         }
+        map.setShipLocations();
         map.printMap();
     }
 }
