@@ -109,8 +109,8 @@ public class Map {
         try {
             for (Location location : newShip.getLocations().keySet())
                 if (getOtherShipLocations(oldShip).contains(location) ||
-                        location.getX() + newShip.getSize() > size ||
-                        location.getY() + newShip.getSize() > size ||
+                        location.getX() >= size ||
+                        location.getY() >= size ||
                         location.getX() < 0 ||
                         location.getY() < 0)
                     return false;
