@@ -71,6 +71,10 @@ public class Map {
     }
 
     public void refreshShipLocations(){
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x ++)
+                matrice[x][y] = " . ";
+
         for (Ship ship : ships){
             if (!ship.getLocations().isEmpty()) {
                 for (Location location : ship.getLocations().keySet()) {
@@ -84,12 +88,29 @@ public class Map {
         }
     }
 
-    public boolean isCorrectlyLocated(Ship ship){
+    public boolean isShipCorrectlyLocated(Ship ship){
         try {
             for (Location location : ship.getLocations().keySet())
                 if (getOtherShipLocations(ship).contains(location) ||
                         location.getX() + ship.getSize() > size ||
                         location.getY() + ship.getSize() > size ||
+                        location.getX() < 0 ||
+                        location.getY() < 0)
+                    return false;
+        }
+        catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isShipCorrectlyReplaced(Ship newShip, Ship oldShip){
+        try {
+            for (Location location : newShip.getLocations().keySet())
+                if (getOtherShipLocations(oldShip).contains(location) ||
+                        location.getX() + newShip.getSize() > size ||
+                        location.getY() + newShip.getSize() > size ||
                         location.getX() < 0 ||
                         location.getY() < 0)
                     return false;

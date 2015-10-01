@@ -1,11 +1,11 @@
 package fr.kuhra.classes;
 
+import fr.kuhra.enumerations.Direction;
 import fr.kuhra.enumerations.PlayerType;
 import fr.kuhra.enumerations.Position;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Dimitri on 28/09/2015.
@@ -78,6 +78,52 @@ public class Player {
         return 0;
     }
 
+    public boolean moveShip(int shipNumber, int x, int y){
+        Ship movingShip = map.getShips().get(shipNumber);
+
+        Ship tmpShip = new Ship(movingShip.getName(), movingShip.getSize(), movingShip.getRange());
+        for (Location location : movingShip.getLocations().keySet()){
+            tmpShip.getLocations().put(new Location(location.getX() + x, location.getY() + y), movingShip.getLocations().get(location));
+        }
+
+        if (map.isShipCorrectlyReplaced(tmpShip, movingShip)){
+            map.getShips().remove(movingShip);
+            map.getShips().add(shipNumber, tmpShip);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveShip(int shipNumber, Direction direction, int nbTiles){
+        Ship movingShip = map.getShips().get(shipNumber);
+
+        Ship tmpShip = new Ship(movingShip.getName(), movingShip.getSize(), movingShip.getRange());
+        for (Location location : movingShip.getLocations().keySet()){
+            switch (direction){
+                case UP :
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() + nbTiles), movingShip.getLocations().get(location));
+                    break;
+                case DOWN :
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() - nbTiles), movingShip.getLocations().get(location));
+                    break;
+                case LEFT :
+                    tmpShip.getLocations().put(new Location(location.getX() - nbTiles, location.getY()), movingShip.getLocations().get(location));
+                    break;
+                case RIGHT :
+                    tmpShip.getLocations().put(new Location(location.getX() + nbTiles, location.getY()), movingShip.getLocations().get(location));
+                    break;
+            }
+        }
+
+        if (map.isShipCorrectlyReplaced(tmpShip, movingShip)){
+            map.getShips().remove(movingShip);
+            map.getShips().add(shipNumber, tmpShip);
+            map.refreshShipLocations();
+            return true;
+        }
+        return false;
+    }
+
     public void setMap(int size) {
         map = new Map(size);
     }
@@ -136,7 +182,7 @@ public class Player {
                     if (position != null) {
                         ship.setLocation(new Location(x, y), position);
 
-                        if (map.isCorrectlyLocated(ship)){
+                        if (map.isShipCorrectlyLocated(ship)){
                             isValid = true;
                             map.refreshShipLocations();
                             map.printMap(name);
@@ -173,7 +219,7 @@ public class Player {
 
                 ship.setLocation(new Location(x, y), position);
 
-                if (map.isCorrectlyLocated(ship)){
+                if (map.isShipCorrectlyLocated(ship)){
                     isValid = true;
                 }
             }
