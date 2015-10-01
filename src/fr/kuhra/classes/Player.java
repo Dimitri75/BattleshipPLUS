@@ -3,6 +3,7 @@ package fr.kuhra.classes;
 import fr.kuhra.enumerations.PlayerType;
 import fr.kuhra.enumerations.Position;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -49,7 +50,8 @@ public class Player {
     public boolean canShoot(Location location){
         for (Ship ship : map.getShips()) {
             for (Location shipLocation : ship.getLocations().keySet()){
-                if (Math.sqrt(Math.pow(location.getX() - shipLocation.getX(), 2) + Math.pow(location.getY() - shipLocation.getY(), 2)) <= ship.getRange())
+                double distance = Math.sqrt(Math.pow(shipLocation.getX() - location.getX(), 2) + Math.pow(shipLocation.getY() - location.getY(), 2));
+                if (distance <= ship.getRange())
                     return true;
             }
         }
@@ -136,7 +138,7 @@ public class Player {
 
                         if (map.isCorrectlyLocated(ship)){
                             isValid = true;
-                            map.setShipLocations();
+                            map.refreshShipLocations();
                             map.printMap(name);
                         }
                         else
@@ -162,9 +164,10 @@ public class Player {
             isValid = false;
 
             while (!isValid) {
-                int x = ThreadLocalRandom.current().nextInt(0, mapSize);
-                int y = ThreadLocalRandom.current().nextInt(0, mapSize);
-                int pos = ThreadLocalRandom.current().nextInt(0, 1);
+
+                int x = new Random().nextInt(map.getSize());
+                int y = new Random().nextInt(map.getSize());
+                int pos = new Random().nextInt(1);
 
                 Position position = (pos == 0) ? Position.HORIZONTAL : Position.VERTICAL;
 
@@ -175,6 +178,6 @@ public class Player {
                 }
             }
         }
-        map.setShipLocations();
+        map.refreshShipLocations();
     }
 }

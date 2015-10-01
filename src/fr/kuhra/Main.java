@@ -10,15 +10,15 @@ public class Main {
     public static void main(String[] args) {
         Game game = new Game();
 
-
+        /*
         game.getPlayer1().getMap().printMap(game.getPlayer1().getName() + " MAP ");
         for (int a = 0; a < 10; a++)
             for (int b = 0; b < 10; b++)
                 game.getPlayer1().shoot(new Location(b, a), game.getPlayer2());
 
         game.getPlayer1().getAdversaryMap().printMap(game.getPlayer1().getName() + " ADVERSARY MAP ");
+        */
 
-/*
         Scanner sc = new Scanner(System.in);
         int x, y, result = 0;
         while (sc.nextLine() != "exit") {
@@ -48,6 +48,6 @@ public class Main {
 
             System.out.println(res);
         }
-        */
+
     }
 }

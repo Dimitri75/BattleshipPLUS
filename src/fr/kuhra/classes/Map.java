@@ -19,6 +19,7 @@ public class Map {
         this.size = size;
 
         matrice = new String[size][size];
+
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++)
                 matrice[x][y] = " . ";
@@ -59,12 +60,23 @@ public class Map {
         return shipLocations;
     }
 
-    public void setShipLocations(){
+    public ArrayList<Location> getOtherShipLocations(Ship ship){
+        ArrayList<Location> otherShipLocations = new ArrayList<>();
+        for (Ship otherShip : ships)
+            if (!ship.equals(otherShip))
+                for (Location location : otherShip.getLocations().keySet())
+                    otherShipLocations.add(location);
+
+        return otherShipLocations;
+    }
+
+    public void refreshShipLocations(){
         for (Ship ship : ships){
             if (!ship.getLocations().isEmpty()) {
                 for (Location location : ship.getLocations().keySet()) {
+
                     if (ship.getLocations().get(location))
-                        matrice[location.getX()][location.getY()] = " o ";
+                        matrice[location.getX()][location.getY()] = " X ";
                     else
                         matrice[location.getX()][location.getY()] = " " + String.valueOf(ships.indexOf(ship)) + " ";
                 }
@@ -73,26 +85,24 @@ public class Map {
     }
 
     public boolean isCorrectlyLocated(Ship ship){
-        Pattern pattern = Pattern.compile("[0-9]");
-        Matcher matcher;
-
-        boolean isCorrect = true;
         try {
-            for (Location location : ship.getLocations().keySet()) {
-                matcher = pattern.matcher(matrice[location.getX()][location.getY()]);
-
-                if (matcher.find())
-                    isCorrect = false;
-            }
+            for (Location location : ship.getLocations().keySet())
+                if (getOtherShipLocations(ship).contains(location) ||
+                        location.getX() + ship.getSize() > size ||
+                        location.getY() + ship.getSize() > size ||
+                        location.getX() < 0 ||
+                        location.getY() < 0)
+                    return false;
         }
         catch (Exception e){
             return false;
         }
-        return isCorrect;
+
+        return true;
     }
 
     public void printMap(String name){
-        //setShipLocations();
+        //refreshShipLocations();
         System.out.println(name);
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++)
