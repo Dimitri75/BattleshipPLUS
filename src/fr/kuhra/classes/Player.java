@@ -5,8 +5,6 @@ import fr.kuhra.enumerations.Position;
 
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Dimitri on 28/09/2015.
@@ -14,6 +12,7 @@ import java.util.regex.Pattern;
 public class Player {
     private String name;
     private Map map;
+    private Map adversaryMap;
 
     public Player(PlayerType playerType){
         if (playerType.equals(PlayerType.COMPUTER))
@@ -27,6 +26,14 @@ public class Player {
         this.map = new Map(10);
     }
 
+    public Map getMap() {
+        return map;
+    }
+
+    public Map getAdversaryMap() {
+        return adversaryMap;
+    }
+
     public String getName() {
         return name;
     }
@@ -35,46 +42,38 @@ public class Player {
         this.name = name;
     }
 
-    public Map getMap() {
-        return map;
+    public void setAdversaryMap(Player player) {
+        this.adversaryMap = new Map(player.getMap().getSize());
     }
 
-    public boolean canShoot(Ship shooter, Location location){
-        int range = shooter.getRange();
-
-        for (Location loc : shooter.getLocations())
-            if (((location.getX() - loc.getX() >= 1 && location.getX() - loc.getX() <= range)
-                    || (loc.getX() - location.getX() >=1 && loc.getX() - location.getX() <= range))
-                    && ((location.getY() - loc.getY() >= 1 && location.getY() - loc.getY() <= range)
-                    || loc.getY() - location.getY() >=1 && loc.getY() - location.getY() <= range))
-                return true;
-
+    public boolean canShoot(Location location){
+        for (Ship ship : map.getShips()) {
+            for (Location shipLocation : ship.getLocations().keySet()){
+                if (Math.sqrt(Math.pow(location.getX() - shipLocation.getX(), 2) + Math.pow(location.getY() - shipLocation.getY(), 2)) <= ship.getRange())
+                    return true;
+            }
+        }
         return false;
     }
 
-    public int shoot(int shipNumber, Location location, Player player){
-        if (map.getShips().isEmpty() || map.getShips().size() <= shipNumber)
-            return -1;
+    public int shoot (Location location, Player player){
+        if (!canShoot(location)) return -1;
 
-        Ship shooter = map.getShips().get(shipNumber);
-        int range = shooter.getRange();
+        for (Ship ship : player.getMap().getShips())
+            for (Location shipLocation : ship.getLocations().keySet())
+                if (location.equals(shipLocation)){
 
-        if (!canShoot(shooter, location))
-            return -1;
+                    adversaryMap.getMatrice()[location.getX()][location.getY()] = " X ";
+                    player.getMap().getMatrice()[location.getX()][location.getY()] = " X ";
+                    ship.getLocations().put(location, true);
 
-        Pattern pattern = Pattern.compile("[0-9]");
-        Matcher matcher = pattern.matcher(player.getMap().getMatrice()[location.getX()][location.getY()]);
+                    return 1;
+                }
 
-        if (matcher.find()){
-            map.getMatrice()[location.getX()][location.getY()] = " o ";
-            player.getMap().getMatrice()[location.getX()][location.getY()] = " o ";
-            return 1;
-        }
-        else{
-            map.getMatrice()[location.getX()][location.getY()] = " x ";
-            player.getMap().getMatrice()[location.getX()][location.getY()] = " x ";
-            return 0;
-        }
+        adversaryMap.getMatrice()[location.getX()][location.getY()] = " - ";
+        player.getMap().getMatrice()[location.getX()][location.getY()] = " - ";
+
+        return 0;
     }
 
     public void setMap(int size) {
@@ -105,7 +104,7 @@ public class Player {
         setMap(mapSize);
 
         System.out.println("\nParfait, voici votre terrain actuel :\n");
-        map.printMap();
+        map.printMap(name);
 
         System.out.println("Vous disposez de cinq bateaux (taille, portée), entrez leurs coordonnées (x, y) ainsi que leur position (verticale/horizontale)\n");
         for (Ship ship : map.getShips()){
@@ -138,7 +137,7 @@ public class Player {
                         if (map.isCorrectlyLocated(ship)){
                             isValid = true;
                             map.setShipLocations();
-                            map.printMap();
+                            map.printMap(name);
                         }
                         else
                             System.out.println("\nVotre navire est mal positionné !\n");
@@ -177,6 +176,5 @@ public class Player {
             }
         }
         map.setShipLocations();
-        map.printMap();
     }
 }

@@ -3,6 +3,7 @@ package fr.kuhra.classes;
 import fr.kuhra.enumerations.Position;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Dimitri on 28/09/2015.
@@ -11,14 +12,14 @@ public class Ship {
     private String name;
     private int size;
     private int range;
-    private ArrayList<Location> locations;
+    private HashMap<Location, Boolean> locations;
     private Position position;
 
     public Ship (String name, int size, int range){
         this.name = name;
         this.size = size;
         this.range = range;
-        this.locations = new ArrayList<>();
+        this.locations = new HashMap<>();
     }
 
     public String getName() {
@@ -37,20 +38,20 @@ public class Ship {
         return position;
     }
 
-    public ArrayList<Location> getLocations() {
+    public HashMap<Location, Boolean> getLocations() {
         return locations;
     }
 
     public void setLocation(Location location, Position position) {
         this.position = position;
         locations.clear();
-        locations.add(location);
+        locations.put(location, false);
 
         for (int i = 1; i < size; i++) {
             if (position.compareTo(Position.HORIZONTAL) == 0)
-                locations.add(new Location(location.getX() + i, location.getY()));
+                locations.put(new Location(location.getX() + i, location.getY()), false);
             else
-                locations.add(new Location(location.getX(), location.getY() + i));
+                locations.put(new Location(location.getX(), location.getY() + i), false);
         }
     }
 }

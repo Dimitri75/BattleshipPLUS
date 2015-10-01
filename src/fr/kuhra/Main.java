@@ -10,13 +10,20 @@ public class Main {
     public static void main(String[] args) {
         Game game = new Game();
 
-        Scanner sc = new Scanner(System.in);
-        int x, y, shipNumber, result = 0;
 
-        while (result != 1) {
-            sc.reset();
-            System.out.print("Avec quel bateau souhaite tirer Player1 ? ");
-            shipNumber = Integer.parseInt(sc.next());
+        game.getPlayer1().getMap().printMap(game.getPlayer1().getName() + " MAP ");
+        for (int a = 0; a < 10; a++)
+            for (int b = 0; b < 10; b++)
+                game.getPlayer1().shoot(new Location(b, a), game.getPlayer2());
+
+        game.getPlayer1().getAdversaryMap().printMap(game.getPlayer1().getName() + " ADVERSARY MAP ");
+
+/*
+        Scanner sc = new Scanner(System.in);
+        int x, y, result = 0;
+        while (sc.nextLine() != "exit") {
+            game.getPlayer1().getMap().printMap("PLAYER1 MAP ");
+            game.getPlayer1().getAdversaryMap().printMap("PLAYER1 ADVERSARY MAP ");
 
             sc.reset();
             System.out.print("Tir de Player1 en x : ");
@@ -26,13 +33,12 @@ public class Main {
             System.out.print("Tir de Player1 en y : ");
             y = Integer.parseInt(sc.next());
 
-            result = game.getPlayer1().shoot(shipNumber, new Location(x, y), game.getPlayer2());
+            result = game.getPlayer1().shoot(new Location(x, y), game.getPlayer2());
 
-            System.out.println("\nPlayer1");
-            game.getPlayer1().getMap().printMap();
+            System.out.println("\n");
+            game.getPlayer2().getMap().printMap("PLAYER2 MAP ");
 
-            System.out.println("\nPlayer2");
-            game.getPlayer2().getMap().printMap();
+            System.out.println("Player2");
 
             String res = "Touché.\n";
             if (result < 0)
@@ -42,5 +48,6 @@ public class Main {
 
             System.out.println(res);
         }
+        */
     }
 }

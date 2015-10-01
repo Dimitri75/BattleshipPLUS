@@ -34,6 +34,10 @@ public class Map {
         ships.add(new Ship("Torpilleur", 2, 5));
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public ArrayList<Ship> getShips() {
         return ships;
     }
@@ -49,7 +53,7 @@ public class Map {
     public ArrayList<Location> getShipLocations(){
         ArrayList<Location> shipLocations = new ArrayList<>();
         for (Ship ship : ships)
-            for (Location location : ship.getLocations())
+            for (Location location : ship.getLocations().keySet())
                 shipLocations.add(location);
 
         return shipLocations;
@@ -58,8 +62,11 @@ public class Map {
     public void setShipLocations(){
         for (Ship ship : ships){
             if (!ship.getLocations().isEmpty()) {
-                for (Location location : ship.getLocations()) {
-                    matrice[location.getX()][location.getY()] = " " + String.valueOf(ships.indexOf(ship)) + " ";
+                for (Location location : ship.getLocations().keySet()) {
+                    if (ship.getLocations().get(location))
+                        matrice[location.getX()][location.getY()] = " o ";
+                    else
+                        matrice[location.getX()][location.getY()] = " " + String.valueOf(ships.indexOf(ship)) + " ";
                 }
             }
         }
@@ -71,7 +78,7 @@ public class Map {
 
         boolean isCorrect = true;
         try {
-            for (Location location : ship.getLocations()) {
+            for (Location location : ship.getLocations().keySet()) {
                 matcher = pattern.matcher(matrice[location.getX()][location.getY()]);
 
                 if (matcher.find())
@@ -84,8 +91,9 @@ public class Map {
         return isCorrect;
     }
 
-    public void printMap(){
+    public void printMap(String name){
         //setShipLocations();
+        System.out.println(name);
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++)
                 System.out.print(matrice[x][y]);

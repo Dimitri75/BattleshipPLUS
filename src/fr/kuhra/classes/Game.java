@@ -12,6 +12,9 @@ public class Game {
     public Game(){
         player1 = new Player(PlayerType.COMPUTER);
         player2 = new Player(PlayerType.COMPUTER);
+
+        player1.setAdversaryMap(player2);
+        player2.setAdversaryMap(player1);
     }
 
     public Game(PlayerType playerType){
