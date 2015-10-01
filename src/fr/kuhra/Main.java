@@ -17,7 +17,7 @@ public class Main {
             for (int b = 0; b < 10; b++)
                 game.getPlayer1().shoot(new Location(b, a), game.getPlayer2());
 
-        game.getPlayer1().getAdversaryMap().printMap(game.getPlayer1().getName() + " ADVERSARY MAP ");
+        game.getPlayer1().getOpponentMap().printMap(game.getPlayer1().getName() + " ADVERSARY MAP ");
         */
 
 
@@ -25,7 +25,7 @@ public class Main {
         int x, y, result = 0;
         while (result != 2) {
             game.getPlayer1().getMap().printMap("PLAYER1 MAP ");
-            /*game.getPlayer1().getAdversaryMap().printMap("PLAYER1 ADVERSARY MAP ");
+            /*game.getPlayer1().getOpponentMap().printMap("PLAYER1 ADVERSARY MAP ");
 
             sc.reset();
             System.out.print("Tir de Player1 en x : ");

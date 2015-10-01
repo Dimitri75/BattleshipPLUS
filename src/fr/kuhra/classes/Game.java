@@ -13,16 +13,16 @@ public class Game {
         player1 = new Player(PlayerType.COMPUTER);
         player2 = new Player(PlayerType.COMPUTER);
 
-        player1.setAdversaryMap(player2);
-        player2.setAdversaryMap(player1);
+        player1.setOpponentMap(player2);
+        player2.setOpponentMap(player1);
     }
 
     public Game(PlayerType playerType){
         player1 = new Player(PlayerType.HUMAN);
         player2 = new Player(playerType);
 
-        player1.setAdversaryMap(player2);
-        player2.setAdversaryMap(player1);
+        player1.setOpponentMap(player2);
+        player2.setOpponentMap(player1);
     }
 
     public Player getPlayer1() {

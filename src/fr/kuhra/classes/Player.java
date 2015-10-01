@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class Player {
     private String name;
     private Map map;
-    private Map adversaryMap;
+    private Map opponentMap;
 
     public Player(PlayerType playerType){
         if (playerType.equals(PlayerType.COMPUTER))
@@ -31,8 +31,8 @@ public class Player {
         return map;
     }
 
-    public Map getAdversaryMap() {
-        return adversaryMap;
+    public Map getOpponentMap() {
+        return opponentMap;
     }
 
     public String getName() {
@@ -43,8 +43,8 @@ public class Player {
         this.name = name;
     }
 
-    public void setAdversaryMap(Player opponent) {
-        this.adversaryMap = new Map(opponent.getMap().getSize());
+    public void setOpponentMap(Player opponent) {
+        this.opponentMap = new Map(opponent.getMap().getSize());
     }
 
     public boolean canShoot(Location location){
@@ -65,14 +65,14 @@ public class Player {
             for (Location shipLocation : opponentShip.getLocations().keySet())
                 if (location.equals(shipLocation)){
 
-                    adversaryMap.getMatrice()[location.getX()][location.getY()] = " X ";
+                    opponentMap.getMatrice()[location.getX()][location.getY()] = " X ";
                     opponent.getMap().getMatrice()[location.getX()][location.getY()] = " X ";
                     opponentShip.getLocations().put(location, true);
 
                     return 1;
                 }
 
-        adversaryMap.getMatrice()[location.getX()][location.getY()] = " - ";
+        opponentMap.getMatrice()[location.getX()][location.getY()] = " - ";
         opponent.getMap().getMatrice()[location.getX()][location.getY()] = " - ";
 
         return 0;
