@@ -54,4 +54,27 @@ public class Ship {
                 locations.put(new Location(location.getX(), location.getY() + i), false);
         }
     }
+
+    public void move(int x, int y){
+        for(Location l : locations.keySet()){
+            l.setX(l.getX() + x);
+            l.setY(l.getY() + y);
+        }
+    }
+
+    public boolean canMove(int x, int y){
+        int xTmp, yTmp
+                ;
+        if(x + y < 3){
+            for(Location l : locations.keySet()){
+                xTmp = l.getX() + x;
+                yTmp = l.getY() + y;
+                if(xTmp > 9 || xTmp < 0 || yTmp > 9 || yTmp < 0){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }
