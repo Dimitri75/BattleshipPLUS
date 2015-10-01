@@ -1,11 +1,11 @@
 package fr.kuhra.classes;
 
+import fr.kuhra.enumerations.Direction;
 import fr.kuhra.enumerations.PlayerType;
 import fr.kuhra.enumerations.Position;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Dimitri on 28/09/2015.
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Player {
     private String name;
     private Map map;
-    private Map adversaryMap;
+    private Map opponentMap;
 
     public Player(PlayerType playerType){
         if (playerType.equals(PlayerType.COMPUTER))
@@ -31,8 +31,8 @@ public class Player {
         return map;
     }
 
-    public Map getAdversaryMap() {
-        return adversaryMap;
+    public Map getOpponentMap() {
+        return opponentMap;
     }
 
     public String getName() {
@@ -43,8 +43,8 @@ public class Player {
         this.name = name;
     }
 
-    public void setAdversaryMap(Player opponent) {
-        this.adversaryMap = new Map(opponent.getMap().getSize());
+    public void setOpponentMap(Player opponent) {
+        this.opponentMap = new Map(opponent.getMap().getSize());
     }
 
     public boolean canShoot(Location location){
@@ -65,17 +65,63 @@ public class Player {
             for (Location shipLocation : opponentShip.getLocations().keySet())
                 if (location.equals(shipLocation)){
 
-                    adversaryMap.getMatrice()[location.getX()][location.getY()] = " X ";
+                    opponentMap.getMatrice()[location.getX()][location.getY()] = " X ";
                     opponent.getMap().getMatrice()[location.getX()][location.getY()] = " X ";
                     opponentShip.getLocations().put(location, true);
 
                     return 1;
                 }
 
-        adversaryMap.getMatrice()[location.getX()][location.getY()] = " - ";
+        opponentMap.getMatrice()[location.getX()][location.getY()] = " - ";
         opponent.getMap().getMatrice()[location.getX()][location.getY()] = " - ";
 
         return 0;
+    }
+
+    public boolean moveShip(int shipNumber, int x, int y){
+        Ship movingShip = map.getShips().get(shipNumber);
+
+        Ship tmpShip = new Ship(movingShip.getName(), movingShip.getSize(), movingShip.getRange());
+        for (Location location : movingShip.getLocations().keySet()){
+            tmpShip.getLocations().put(new Location(location.getX() + x, location.getY() + y), movingShip.getLocations().get(location));
+        }
+
+        if (map.hasShipCorrectlyMoved(tmpShip, movingShip)){
+            map.getShips().remove(movingShip);
+            map.getShips().add(shipNumber, tmpShip);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveShip(int shipNumber, Direction direction, int nbTiles){
+        Ship movingShip = map.getShips().get(shipNumber);
+
+        Ship tmpShip = new Ship(movingShip.getName(), movingShip.getSize(), movingShip.getRange());
+        for (Location location : movingShip.getLocations().keySet()){
+            switch (direction){
+                case UP :
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() - nbTiles), movingShip.getLocations().get(location));
+                    break;
+                case DOWN :
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() + nbTiles), movingShip.getLocations().get(location));
+                    break;
+                case LEFT :
+                    tmpShip.getLocations().put(new Location(location.getX() - nbTiles, location.getY()), movingShip.getLocations().get(location));
+                    break;
+                case RIGHT :
+                    tmpShip.getLocations().put(new Location(location.getX() + nbTiles, location.getY()), movingShip.getLocations().get(location));
+                    break;
+            }
+        }
+
+        if (map.hasShipCorrectlyMoved(tmpShip, movingShip)){
+            map.getShips().remove(movingShip);
+            map.getShips().add(shipNumber, tmpShip);
+            map.refreshShipLocations();
+            return true;
+        }
+        return false;
     }
 
     public void setMap(int size) {
@@ -136,7 +182,7 @@ public class Player {
                     if (position != null) {
                         ship.setLocation(new Location(x, y), position);
 
-                        if (map.isCorrectlyLocated(ship)){
+                        if (map.isShipCorrectlyLocated(ship)){
                             isValid = true;
                             map.refreshShipLocations();
                             map.printMap(name);
@@ -155,7 +201,7 @@ public class Player {
 
     public void initComputerPlayer(){
         name = "Computer";
-        //int mapSize = ThreadLocalRandom.current().nextInt(10, 25);
+        //int mapSize = new Random().nextInt(10) + 10;
         int mapSize = 10;
         setMap(mapSize);
 
@@ -173,7 +219,7 @@ public class Player {
 
                 ship.setLocation(new Location(x, y), position);
 
-                if (map.isCorrectlyLocated(ship)){
+                if (map.isShipCorrectlyLocated(ship)){
                     isValid = true;
                 }
             }
