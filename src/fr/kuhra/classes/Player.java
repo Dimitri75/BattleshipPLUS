@@ -43,8 +43,8 @@ public class Player {
         this.name = name;
     }
 
-    public void setAdversaryMap(Player player) {
-        this.adversaryMap = new Map(player.getMap().getSize());
+    public void setAdversaryMap(Player opponent) {
+        this.adversaryMap = new Map(opponent.getMap().getSize());
     }
 
     public boolean canShoot(Location location){
@@ -58,22 +58,22 @@ public class Player {
         return false;
     }
 
-    public int shoot (Location location, Player player){
+    public int shoot (Location location, Player opponent){
         if (!canShoot(location)) return -1;
 
-        for (Ship ship : player.getMap().getShips())
-            for (Location shipLocation : ship.getLocations().keySet())
+        for (Ship opponentShip : opponent.getMap().getShips())
+            for (Location shipLocation : opponentShip.getLocations().keySet())
                 if (location.equals(shipLocation)){
 
                     adversaryMap.getMatrice()[location.getX()][location.getY()] = " X ";
-                    player.getMap().getMatrice()[location.getX()][location.getY()] = " X ";
-                    ship.getLocations().put(location, true);
+                    opponent.getMap().getMatrice()[location.getX()][location.getY()] = " X ";
+                    opponentShip.getLocations().put(location, true);
 
                     return 1;
                 }
 
         adversaryMap.getMatrice()[location.getX()][location.getY()] = " - ";
-        player.getMap().getMatrice()[location.getX()][location.getY()] = " - ";
+        opponent.getMap().getMatrice()[location.getX()][location.getY()] = " - ";
 
         return 0;
     }
