@@ -20,6 +20,9 @@ public class Game {
     public Game(PlayerType playerType){
         player1 = new Player(PlayerType.HUMAN);
         player2 = new Player(playerType);
+
+        player1.setAdversaryMap(player2);
+        player2.setAdversaryMap(player1);
     }
 
     public Player getPlayer1() {

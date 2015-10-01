@@ -86,7 +86,7 @@ public class Player {
             tmpShip.getLocations().put(new Location(location.getX() + x, location.getY() + y), movingShip.getLocations().get(location));
         }
 
-        if (map.isShipCorrectlyReplaced(tmpShip, movingShip)){
+        if (map.hasShipCorrectlyMoved(tmpShip, movingShip)){
             map.getShips().remove(movingShip);
             map.getShips().add(shipNumber, tmpShip);
             return true;
@@ -101,10 +101,10 @@ public class Player {
         for (Location location : movingShip.getLocations().keySet()){
             switch (direction){
                 case UP :
-                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() + nbTiles), movingShip.getLocations().get(location));
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() - nbTiles), movingShip.getLocations().get(location));
                     break;
                 case DOWN :
-                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() - nbTiles), movingShip.getLocations().get(location));
+                    tmpShip.getLocations().put(new Location(location.getX(), location.getY() + nbTiles), movingShip.getLocations().get(location));
                     break;
                 case LEFT :
                     tmpShip.getLocations().put(new Location(location.getX() - nbTiles, location.getY()), movingShip.getLocations().get(location));
@@ -115,7 +115,7 @@ public class Player {
             }
         }
 
-        if (map.isShipCorrectlyReplaced(tmpShip, movingShip)){
+        if (map.hasShipCorrectlyMoved(tmpShip, movingShip)){
             map.getShips().remove(movingShip);
             map.getShips().add(shipNumber, tmpShip);
             map.refreshShipLocations();
@@ -201,7 +201,7 @@ public class Player {
 
     public void initComputerPlayer(){
         name = "Computer";
-        //int mapSize = ThreadLocalRandom.current().nextInt(10, 25);
+        //int mapSize = new Random().nextInt(10) + 10;
         int mapSize = 10;
         setMap(mapSize);
 

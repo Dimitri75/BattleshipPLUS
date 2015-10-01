@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Game game = new Game();
 
-    /*
+        /*
         game.getPlayer1().getMap().printMap(game.getPlayer1().getName() + " MAP ");
         for (int a = 0; a < 10; a++)
             for (int b = 0; b < 10; b++)

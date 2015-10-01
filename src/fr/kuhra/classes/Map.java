@@ -105,7 +105,7 @@ public class Map {
         return true;
     }
 
-    public boolean isShipCorrectlyReplaced(Ship newShip, Ship oldShip){
+    public boolean hasShipCorrectlyMoved(Ship newShip, Ship oldShip){
         try {
             for (Location location : newShip.getLocations().keySet())
                 if (getOtherShipLocations(oldShip).contains(location) ||
