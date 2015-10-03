@@ -10,7 +10,7 @@ public class Game {
     private Player player2;
 
     public Game(){
-        player1 = new Player(PlayerType.COMPUTER);
+        player1 = new Player(PlayerType.HUMAN);
         player2 = new Player(PlayerType.COMPUTER);
 
         player1.setOpponentMap(player2);
