@@ -78,6 +78,16 @@ public class Player {
         return 0;
     }
 
+    public int shootRandomLocation (Player opponent){
+        int xIA = 0, yIA = 0, result = -1;
+        while (result < 0) {
+            xIA = new Random().nextInt(opponent.getMap().getSize());
+            yIA = new Random().nextInt(opponent.getMap().getSize());
+            result = shoot(new Location(xIA, yIA), opponent);
+        }
+        return result;
+    }
+
     public boolean moveShip(int shipNumber, int x, int y){
         Ship movingShip = map.getShips().get(shipNumber);
 
