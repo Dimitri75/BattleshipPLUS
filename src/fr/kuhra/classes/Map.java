@@ -3,6 +3,8 @@ package fr.kuhra.classes;
 import fr.kuhra.enumerations.Position;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,15 +90,22 @@ public class Map {
         }
     }
 
+    public TreeSet<Location> getSortedShipLocations(Ship ship){
+        return new TreeSet<>(ship.getLocations().keySet());
+    }
+
     public boolean isShipCorrectlyLocated(Ship ship){
         try {
-            for (Location location : ship.getLocations().keySet())
+            int sizeLeft = ship.getSize();
+            TreeSet<Location> sortedShipLocations = getSortedShipLocations(ship);
+            for (Location location : sortedShipLocations) {
                 if (getOtherShipLocations(ship).contains(location) ||
-                        location.getX() + ship.getSize() > size ||
-                        location.getY() + ship.getSize() > size ||
+                        (location.getX() + sizeLeft > size && location.getY() + sizeLeft > size) ||
                         location.getX() < 0 ||
                         location.getY() < 0)
                     return false;
+                sizeLeft--;
+            }
         }
         catch (Exception e){
             return false;

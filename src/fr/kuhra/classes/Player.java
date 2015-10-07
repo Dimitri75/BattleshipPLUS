@@ -4,6 +4,7 @@ import fr.kuhra.enumerations.Direction;
 import fr.kuhra.enumerations.PlayerType;
 import fr.kuhra.enumerations.Position;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -235,5 +236,19 @@ public class Player {
             }
         }
         map.refreshShipLocations();
+    }
+
+    public boolean randomShipMovement() {
+        HashMap<Integer, Direction> directionDictionary = new HashMap<>();
+        directionDictionary.put(0, Direction.UP);
+        directionDictionary.put(1, Direction.DOWN);
+        directionDictionary.put(2, Direction.LEFT);
+        directionDictionary.put(3, Direction.RIGHT);
+
+        int randomDirection = new Random().nextInt(3);
+        int nbTiles = new Random().nextInt(1) + 1;
+        int randomShip = new Random().nextInt(4);
+
+        return moveShip(randomShip, directionDictionary.get(randomDirection), nbTiles);
     }
 }

@@ -13,7 +13,7 @@ public class Main {
         Game game = new Game();
 
         Scanner sc = new Scanner(System.in);
-        int x, y, result = 0;
+        int x, y, result = -1;
         while (result != 2) {
             while (result < 0) {
                 game.getPlayer1().getMap().printMap("PLAYER1 MAP ");
@@ -90,8 +90,13 @@ public class Main {
                 }
             }
 
-            String res = game.getPlayer2().shootRandomLocation(game.getPlayer1()) == 0 ? "Raté." : "Touché.";
-            System.out.println(res);
+            int iaRes = game.getPlayer2().shootRandomLocation(game.getPlayer1());
+            if(iaRes == 0) {
+                System.out.println("Raté.\n");
+                game.getPlayer2().randomShipMovement();
+            }
+            else
+                System.out.println("Touché.\n");
         }
     }
 }
