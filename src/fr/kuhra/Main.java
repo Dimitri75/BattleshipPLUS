@@ -6,7 +6,6 @@ import fr.kuhra.enumerations.ConsoleSentence;
 import fr.kuhra.enumerations.Direction;
 
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -24,11 +23,11 @@ public class Main {
 
                 // Récupération des coordonnées du tir
                 sc.reset();
-                System.out.print(ConsoleSentence.X_SHOOT_OF + game.getPlayer1().getName());
+                System.out.print(ConsoleSentence.X_SHOOT_OF);
                 x = Integer.parseInt(sc.next());
 
                 sc.reset();
-                System.out.print(ConsoleSentence.Y_SHOOT_OF + game.getPlayer1().getName());
+                System.out.print(ConsoleSentence.Y_SHOOT_OF);
                 y = Integer.parseInt(sc.next());
 
                 // Tir
@@ -94,7 +93,7 @@ public class Main {
         // Tir de l'ordinateur
         if (game.getPlayer2().shootRandomLocation(game.getPlayer1()) == 0) {
             System.out.println(ConsoleSentence.MISSED);
-            
+
             // Déplacement d'un bateau de l'ordinateur
             game.getPlayer2().randomShipMovement();
         } else

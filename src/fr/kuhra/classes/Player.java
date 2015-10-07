@@ -181,7 +181,7 @@ public class Player {
 
                     sc.reset();
                     Position position = null;
-                    System.out.print("\t" + ConsoleSentence.CHOOSE_POSITION + "(v/h)\n");
+                    System.out.print("\t" + ConsoleSentence.CHOOSE_POSITION + "(v/h)");
 
                     String pos = sc.next();
                     if (pos.compareTo("v") == 0)
@@ -211,30 +211,29 @@ public class Player {
 
     public void initComputerPlayer(){
         name = "Computer";
-        //int mapSize = new Random().nextInt(10) + 10;
+        //int mapSize = new Random().nextInt(15) + 10;
         int mapSize = 10;
         setMap(mapSize);
 
-        boolean isValid = false;
+        boolean isValid;
         for (Ship ship : map.getShips()){
             isValid = false;
-
             while (!isValid) {
 
                 int x = new Random().nextInt(map.getSize());
                 int y = new Random().nextInt(map.getSize());
-                int pos = new Random().nextInt(1);
+                int pos = new Random().nextInt(2);
 
                 Position position = (pos == 0) ? Position.HORIZONTAL : Position.VERTICAL;
 
                 ship.setLocation(new Location(x, y), position);
 
-                if (map.isShipCorrectlyLocated(ship)){
+                if (map.isShipCorrectlyLocated(ship)) {
                     isValid = true;
+                    map.refreshShipLocations();
                 }
             }
         }
-        map.refreshShipLocations();
     }
 
     public boolean randomShipMovement() {
@@ -244,9 +243,9 @@ public class Player {
         directionDictionary.put(2, Direction.LEFT);
         directionDictionary.put(3, Direction.RIGHT);
 
-        int randomDirection = new Random().nextInt(3);
-        int nbTiles = new Random().nextInt(1) + 1;
-        int randomShip = new Random().nextInt(4);
+        int randomDirection = new Random().nextInt(4);
+        int nbTiles = new Random().nextInt(2) + 1;
+        int randomShip = new Random().nextInt(5);
 
         return moveShip(randomShip, directionDictionary.get(randomDirection), nbTiles);
     }

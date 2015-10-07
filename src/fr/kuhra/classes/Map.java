@@ -96,9 +96,9 @@ public class Map {
             TreeSet<Location> sortedShipLocations = new TreeSet<>(ship.getLocations().keySet());
             for (Location location : sortedShipLocations) {
                 if (getOtherShipLocations(ship).contains(location) ||
-                        (location.getX() + sizeLeft > size && location.getY() + sizeLeft > size) ||
                         location.getX() < 0 ||
-                        location.getY() < 0)
+                        location.getY() < 0 ||
+                        (location.getX() + sizeLeft > size || location.getY() + sizeLeft > size))
                     return false;
                 sizeLeft--;
             }
@@ -108,6 +108,7 @@ public class Map {
         }
 
         return true;
+
     }
 
     public boolean hasShipCorrectlyMoved(Ship newShip, Ship oldShip){
