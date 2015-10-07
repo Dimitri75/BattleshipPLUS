@@ -90,14 +90,10 @@ public class Map {
         }
     }
 
-    public TreeSet<Location> getSortedShipLocations(Ship ship){
-        return new TreeSet<>(ship.getLocations().keySet());
-    }
-
     public boolean isShipCorrectlyLocated(Ship ship){
         try {
             int sizeLeft = ship.getSize();
-            TreeSet<Location> sortedShipLocations = getSortedShipLocations(ship);
+            TreeSet<Location> sortedShipLocations = new TreeSet<>(ship.getLocations().keySet());
             for (Location location : sortedShipLocations) {
                 if (getOtherShipLocations(ship).contains(location) ||
                         (location.getX() + sizeLeft > size && location.getY() + sizeLeft > size) ||
