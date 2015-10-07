@@ -2,8 +2,10 @@ package fr.kuhra;
 
 import fr.kuhra.classes.Game;
 import fr.kuhra.classes.Location;
+import fr.kuhra.enumerations.ConsoleSentence;
 import fr.kuhra.enumerations.Direction;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,35 +18,46 @@ public class Main {
         int x, y, result = -1;
         while (result != 2) {
             while (result < 0) {
-                game.getPlayer1().getMap().printMap("PLAYER1 MAP ");
-                game.getPlayer1().getOpponentMap().printMap("PLAYER1 ADVERSARY MAP ");
+                // Affichage de votre carte et de celle de l'adversaire
+                game.getPlayer1().getMap().printMap(ConsoleSentence.MAP_OF + game.getPlayer1().getName());
+                game.getPlayer1().getOpponentMap().printMap(ConsoleSentence.MAP_OF + game.getPlayer2().getName());
 
+                // Récupération des coordonnées du tir
                 sc.reset();
-                System.out.print("Tir de Player1 en x : ");
+                System.out.print(ConsoleSentence.X_SHOOT_OF + game.getPlayer1().getName());
                 x = Integer.parseInt(sc.next());
 
                 sc.reset();
-                System.out.print("Tir de Player1 en y : ");
+                System.out.print(ConsoleSentence.Y_SHOOT_OF + game.getPlayer1().getName());
                 y = Integer.parseInt(sc.next());
 
+                // Tir
                 result = game.getPlayer1().shoot(new Location(x, y), game.getPlayer2());
 
                 System.out.println("\n");
-                game.getPlayer1().getOpponentMap().printMap("PLAYER1 ADVERSARY MAP ");
+                game.getPlayer1().getOpponentMap().printMap(ConsoleSentence.MAP_OF + game.getPlayer2().getName());
 
 
-                String res = "Touché.\n";
+                // Affichage du résultat
+                String res = ConsoleSentence.TOUCHED.toString();
                 if (result < 0)
-                    res = "Vous ne pouvez pas tirer ici.\n";
+                    res = ConsoleSentence.CANT_SHOOT_HERE.toString();
                 else if (result == 0)
-                    res = "Raté.\n";
+                    res = ConsoleSentence.MISSED.toString();
 
-                System.out.println(res);
+                System.out.println("\n" + res);
             }
 
+            // Déplacement d'un bateau
             sc.reset();
-            System.out.println("Voulez-vous déplacer un navire ? (o/n)");
+            System.out.println(ConsoleSentence.ASK_SHIP_MOVEMENT + " (o/n)");
             if (sc.next().equals("o")) {
+                HashMap<String, Direction> directionDictionary = new HashMap<>();
+                directionDictionary.put("z", Direction.UP);
+                directionDictionary.put("s", Direction.DOWN);
+                directionDictionary.put("q", Direction.LEFT);
+                directionDictionary.put("d", Direction.RIGHT);
+
                 boolean moved = false;
                 while (!moved) {
                     int shipNumber = -1;
@@ -52,51 +65,40 @@ public class Main {
                     int nbTiles = -1;
                     while (shipNumber < 0 || shipNumber >= game.getPlayer1().getMap().getShips().size()) {
                         sc.reset();
-                        System.out.println("Quel navire souhaitez-vous déplacer ?");
+                        System.out.println(ConsoleSentence.WHAT_SHIP_TO_MOVE);
                         shipNumber = Integer.parseInt(sc.next());
                     }
 
                     while (directionChar == null || !"zqsd".contains(directionChar) || directionChar.length() != 1) {
                         sc.reset();
-                        System.out.println("Dans quelle direction souhaitez-vous le déplacer ? (z, q, s, d)");
+                        System.out.println(ConsoleSentence.WHICH_DIRECTION + " (z, q, s, d)");
                         directionChar = sc.next();
                     }
 
                     while (nbTiles < 0 || nbTiles > 2) {
                         sc.reset();
-                        System.out.println("De combien de cases souhaitez-vous déplacer le navire ? (1 ou 2)");
+                        System.out.println(ConsoleSentence.HOW_MANY_TILES + " (1 ou 2)");
                         nbTiles = Integer.parseInt(sc.next());
                     }
 
-                    switch (directionChar) {
-                        case "z":
-                            moved = game.getPlayer1().moveShip(shipNumber, Direction.UP, nbTiles);
-                            break;
-                        case "q":
-                            moved = game.getPlayer1().moveShip(shipNumber, Direction.LEFT, nbTiles);
-                            break;
-                        case "s":
-                            moved = game.getPlayer1().moveShip(shipNumber, Direction.DOWN, nbTiles);
-                            break;
-                        case "d":
-                            moved = game.getPlayer1().moveShip(shipNumber, Direction.RIGHT, nbTiles);
-                            break;
-                    }
-
-                    if (moved)
-                        game.getPlayer1().getMap().printMap("MAP AFTER MOVE");
-                    else
-                        System.out.println("Déplacement incorrect.\n");
+                    moved = game.getPlayer1().moveShip(shipNumber, directionDictionary.get(directionChar), nbTiles);
                 }
-            }
 
-            int iaRes = game.getPlayer2().shootRandomLocation(game.getPlayer1());
-            if(iaRes == 0) {
-                System.out.println("Raté.\n");
-                game.getPlayer2().randomShipMovement();
+                if (moved)
+                    game.getPlayer1().getMap().printMap(ConsoleSentence.MAP_AFTER_MOVEMENT.toString());
+                else
+                    System.out.println(ConsoleSentence.INCORRECT_MOVEMENT + "\n");
             }
-            else
-                System.out.println("Touché.\n");
         }
+
+        // Tir de l'ordinateur
+        if (game.getPlayer2().shootRandomLocation(game.getPlayer1()) == 0) {
+            System.out.println(ConsoleSentence.MISSED);
+            
+            // Déplacement d'un bateau de l'ordinateur
+            game.getPlayer2().randomShipMovement();
+        } else
+            System.out.println(ConsoleSentence.TOUCHED);
     }
 }
+

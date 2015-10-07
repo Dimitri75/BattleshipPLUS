@@ -1,5 +1,6 @@
 package fr.kuhra.classes;
 
+import fr.kuhra.enumerations.ConsoleSentence;
 import fr.kuhra.enumerations.Direction;
 import fr.kuhra.enumerations.PlayerType;
 import fr.kuhra.enumerations.Position;
@@ -143,12 +144,11 @@ public class Player {
         boolean isValid = false;
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Bienvenue sur Battleship+ !\n" +
-                "Entrez votre nom, nouveau joueur.");
+        System.out.println(ConsoleSentence.WELCOME);
+        System.out.println(ConsoleSentence.ENTER_NAME);
         name = sc.nextLine();
 
-        System.out.println("\nBonjour " + name + ", nous allons pouvoir commencer.\n" +
-                "Choisissez la taille de votre terrain de jeu (comprise entre 10 et 25).");
+        System.out.println(ConsoleSentence.CHOOSE_MAP_SIZE + " (10 à 25)");
 
         int mapSize = 0;
         while (!isValid) {
@@ -158,14 +158,13 @@ public class Player {
             if (mapSize >= 10 && mapSize <= 25)
                 isValid = true;
             else
-                System.out.println("\nEntrez une taille comprise entre 10 et 25 !");
+                System.out.println(ConsoleSentence.ERROR);
         }
         setMap(mapSize);
 
-        System.out.println("\nParfait, voici votre terrain actuel :\n");
-        map.printMap(name);
+        map.printMap(ConsoleSentence.HERE_IS_YOUR_MAP.toString());
 
-        System.out.println("Vous disposez de cinq bateaux (taille, portée), entrez leurs coordonnées (x, y) ainsi que leur position (verticale/horizontale)\n");
+        System.out.println(ConsoleSentence.WHAT_YOU_DISPOSE);
         for (Ship ship : map.getShips()){
             isValid = false;
             System.out.println(ship.getName() + " (" + ship.getSize() + ", " + ship.getRange() + ") :");
@@ -173,16 +172,16 @@ public class Player {
             while (!isValid) {
                 try {
                     sc.reset();
-                    System.out.print("\tChoisissez un point d'abscisse (x) : ");
+                    System.out.print("\t" + ConsoleSentence.CHOOSE_X);
                     int x = Integer.parseInt(sc.next());
 
                     sc.reset();
-                    System.out.print("\tChoisissez un point d'ordonnée (y) : ");
+                    System.out.print("\t" + ConsoleSentence.CHOOSE_Y);
                     int y = Integer.parseInt(sc.next());
 
                     sc.reset();
                     Position position = null;
-                    System.out.print("\tChoisissez une position (v/h) : ");
+                    System.out.print("\t" + ConsoleSentence.CHOOSE_POSITION + "(v/h)\n");
 
                     String pos = sc.next();
                     if (pos.compareTo("v") == 0)
@@ -199,11 +198,11 @@ public class Player {
                             map.printMap(name);
                         }
                         else
-                            System.out.println("\nVotre navire est mal positionné !\n");
+                            System.out.println(ConsoleSentence.BAD_SHIP_LOCATION);
                     }
                 }
                 catch(Exception e){
-                    System.out.println("Oops, une erreur est survenue !");
+                    System.out.println(ConsoleSentence.ERROR);
                     isValid = false;
                 }
             }
