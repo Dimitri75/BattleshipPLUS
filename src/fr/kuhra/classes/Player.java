@@ -145,7 +145,7 @@ public class Player {
         Scanner sc = new Scanner(System.in);
 
         System.out.println(ConsoleSentence.WELCOME);
-        System.out.println(ConsoleSentence.ENTER_NAME);
+        System.out.print(ConsoleSentence.ENTER_NAME);
         name = sc.nextLine();
 
         System.out.println(ConsoleSentence.CHOOSE_MAP_SIZE + " (10 à 25)");

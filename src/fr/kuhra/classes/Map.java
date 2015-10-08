@@ -138,4 +138,15 @@ public class Map {
         }
         System.out.println();
     }
+
+    public boolean hasNoShipsLeft(){
+        for(Ship ship : ships){
+            for(Boolean deadTile : ship.getLocations().values()){
+                if(!deadTile){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
