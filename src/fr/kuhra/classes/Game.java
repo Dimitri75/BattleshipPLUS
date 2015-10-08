@@ -51,13 +51,19 @@ public class Game {
                 player1.getOpponentMap().printMap(ConsoleSentence.MAP_OF + player1.getName());
 
                 // Récupération des coordonnées du tir
-                sc.reset();
-                System.out.print(ConsoleSentence.X_SHOOT_OF);
-                x = Integer.parseInt(sc.next());
 
-                sc.reset();
-                System.out.print(ConsoleSentence.Y_SHOOT_OF);
-                y = Integer.parseInt(sc.next());
+                try {
+                    sc.reset();
+                    System.out.print(ConsoleSentence.X_SHOOT_OF);
+                    x = Integer.parseInt(sc.next());
+
+                    sc.reset();
+                    System.out.print(ConsoleSentence.Y_SHOOT_OF);
+                    y = Integer.parseInt(sc.next());
+                }catch(NumberFormatException e){
+                    x = -1;
+                    y = -1;
+                }
 
                 // Tir
                 result = player1.shoot(new Location(x, y), player2);
@@ -77,7 +83,7 @@ public class Game {
                         result = 2;
                         System.out.println(ConsoleSentence.WIN);
                         gameDone = true;
-                        break;
+                        return;
                     }
                 }
 
@@ -138,6 +144,7 @@ public class Game {
                 if (player2.getMap().hasNoShipsLeft()) {
                     gameDone = true;
                     System.out.println(ConsoleSentence.LOOSE);
+                    return;
                 }
             }
         }
