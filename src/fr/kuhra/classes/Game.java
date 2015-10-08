@@ -40,10 +40,11 @@ public class Game {
 
     public void start(){
         Scanner sc = new Scanner(System.in);
-        int x, y, result = -1;
+        int x, y, result;
         boolean gameDone = false;
 
         while (!gameDone) {
+            result = -1;
             while (result < 0) {
                 // Affichage de votre carte et de celle de l'adversaire
                 player1.getMap().printMap(ConsoleSentence.MAP_OF + player1.getName());
@@ -75,6 +76,8 @@ public class Game {
                     if (player1.getMap().hasNoShipsLeft()) {
                         result = 2;
                         System.out.println(ConsoleSentence.WIN);
+                        gameDone = true;
+                        break;
                     }
                 }
 
@@ -133,7 +136,7 @@ public class Game {
                 System.out.println(ConsoleSentence.TOUCHED);
 
                 if (player2.getMap().hasNoShipsLeft()) {
-                    result = 2;
+                    gameDone = true;
                     System.out.println(ConsoleSentence.LOOSE);
                 }
             }
